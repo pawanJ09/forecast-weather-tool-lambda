@@ -1,0 +1,49 @@
+{
+  "name": "get_forecast",
+  "description": "Get a 10-day daily weather forecast (high/low temps, precipitation chance, wind) for a location given its latitude and longitude.",
+  "inputSchema": {
+    "type": "object",
+    "description": "Coordinates of the location to fetch a 10-day forecast for.",
+    "properties": {
+      "latitude": {
+        "type": "number",
+        "description": "Latitude of the location, e.g. 40.7128"
+      },
+      "longitude": {
+        "type": "number",
+        "description": "Longitude of the location, e.g. -74.0060"
+      }
+    },
+    "required": ["latitude", "longitude"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "description": "10-day daily forecast for the requested location, or an error if the upstream call failed.",
+    "properties": {
+      "latitude": { "type": "number", "description": "Latitude echoed back from Open-Meteo" },
+      "longitude": { "type": "number", "description": "Longitude echoed back from Open-Meteo" },
+      "timezone": { "type": "string", "description": "IANA timezone resolved for the coordinates" },
+      "forecast_days": { "type": "integer", "description": "Number of days included in the forecast" },
+      "days": {
+        "type": "array",
+        "description": "One entry per forecast day, in order",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": { "type": "string", "description": "ISO 8601 date (YYYY-MM-DD)" },
+            "weather_code": { "type": "integer", "description": "WMO weather interpretation code" },
+            "temp_max_f": { "type": "number", "description": "Daily high temperature in Fahrenheit" },
+            "temp_min_f": { "type": "number", "description": "Daily low temperature in Fahrenheit" },
+            "feels_like_max_f": { "type": "number", "description": "Daily high apparent temperature in Fahrenheit" },
+            "feels_like_min_f": { "type": "number", "description": "Daily low apparent temperature in Fahrenheit" },
+            "precipitation_in": { "type": "number", "description": "Total precipitation for the day in inches" },
+            "precipitation_probability_pct": { "type": "number", "description": "Max precipitation probability percentage" },
+            "wind_speed_max_mph": { "type": "number", "description": "Max wind speed for the day in miles per hour" },
+            "wind_direction_deg": { "type": "number", "description": "Dominant wind direction in degrees" }
+          }
+        }
+      },
+      "error": { "type": "string", "description": "Present instead of the fields above if the call failed" }
+    }
+  }
+}
